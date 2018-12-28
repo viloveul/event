@@ -1,0 +1,21 @@
+{
+    "name": "viloveul/event",
+    "description": "Event of Viloveul.",
+    "type": "component",
+    "license": "MIT",
+    "authors": [{
+        "name": "Fajrul Akbar Zuhdi",
+        "email": "fajrulaz@gmail.com"
+    }],
+    "keywords": ["component", "micro", "zafex", "viloveul", "fajrulaz", "event"],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Viloveul\\Event\\": "src/"
+        }
+    }
+}
