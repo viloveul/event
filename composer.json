@@ -13,6 +13,10 @@
     "config": {
         "sort-packages": true
     },
+    "require": {
+        "php": "~7.0",
+        "ext-spl": "*"
+    },
     "autoload": {
         "psr-4": {
             "Viloveul\\Event\\": "src/"
