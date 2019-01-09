@@ -69,7 +69,7 @@ class Dispatcher implements IDispatcher
      * @param $handler
      * @param $priority
      */
-    public function listen($event, callable $handler, $priority = 10)
+    public function listen($event, callable $handler, $priority = 10): void
     {
         if (!$this->hasListeners($event)) {
             $this->listeners[$event] = [];
@@ -97,7 +97,7 @@ class Dispatcher implements IDispatcher
         } elseif (is_string($callback[0])) {
             return $callback[0] . '::' . $callback[1];
         } else {
-            return mt_rand();
+            return (string) mt_rand();
         }
     }
 }

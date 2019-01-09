@@ -25,5 +25,5 @@ interface Dispatcher
      * @param $handler
      * @param $priority
      */
-    public function listen($event, callable $handler, $priority = 10);
+    public function listen($event, callable $handler, $priority = 10): void;
 }

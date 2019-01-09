@@ -1,25 +1,27 @@
 {
     "name": "viloveul/event",
-    "description": "Event of Viloveul.",
-    "type": "component",
+    "description": "Event Dispatcher of Viloveul",
+    "type": "library",
     "license": "MIT",
+    "keywords": ["zafex", "viloveul", "fajrulaz", "event", "component", "library"],
+    "homepage": "http://www.viloveul.com",
+    "readme": "README.MD",
     "authors": [{
         "name": "Fajrul Akbar Zuhdi",
         "email": "fajrulaz@gmail.com"
     }],
-    "keywords": ["component", "micro", "zafex", "viloveul", "fajrulaz", "event"],
     "minimum-stability": "dev",
     "prefer-stable": true,
     "config": {
         "sort-packages": true
     },
-    "require": {
-        "php": "~7.0",
-        "ext-spl": "*"
-    },
     "autoload": {
         "psr-4": {
             "Viloveul\\Event\\": "src/"
         }
+    },
+    "require": {
+        "php": "~7.0",
+        "ext-spl": "*"
     }
 }
