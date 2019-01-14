@@ -13,6 +13,24 @@ class Dispatcher implements IDispatcher
     protected $listeners = [];
 
     /**
+     * @param $event
+     * @param callback    $handler
+     * @param $priority
+     */
+    public function addListener($event, callback $handler, $priority = 10): void
+    {
+        if (!$this->hasListeners($event)) {
+            $this->listeners[$event] = [];
+        }
+        $key = abs($priority);
+        $id = $this->buildId($handler, $key);
+        if (isset($this->listeners[$event][$key][$id])) {
+            throw new ListenerException("Listener already registered.");
+        }
+        $this->listeners[$event][$key][$id] = $handler;
+    }
+
+    /**
      * @param  $event
      * @param  array    $payload
      * @return mixed
@@ -71,15 +89,7 @@ class Dispatcher implements IDispatcher
      */
     public function listen($event, callable $handler, $priority = 10): void
     {
-        if (!$this->hasListeners($event)) {
-            $this->listeners[$event] = [];
-        }
-        $key = abs($priority);
-        $id = $this->buildId($handler, $key);
-        if (isset($this->listeners[$event][$key][$id])) {
-            throw new ListenerException("Listener already registered.");
-        }
-        $this->listeners[$event][$key][$id] = $handler;
+        $this->addListener($event, $handler, $priority);
     }
 
     /**
