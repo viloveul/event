@@ -6,6 +6,13 @@ interface Dispatcher
 {
     /**
      * @param $event
+     * @param $handler
+     * @param $priority
+     */
+    public function addListener($event, callable $handler, $priority = 10): void;
+
+    /**
+     * @param $event
      * @param array    $payload
      */
     public function dispatch($event, array $payload = []);
