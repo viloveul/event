@@ -14,10 +14,10 @@ class Dispatcher implements IDispatcher
 
     /**
      * @param $event
-     * @param callback    $handler
+     * @param $handler
      * @param $priority
      */
-    public function addListener($event, callback $handler, $priority = 10): void
+    public function addListener($event, callable $handler, $priority = 10): void
     {
         if (!$this->hasListeners($event)) {
             $this->listeners[$event] = [];
