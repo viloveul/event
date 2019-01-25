@@ -79,7 +79,7 @@ class Dispatcher implements IDispatcher
      */
     public function hasListeners($event): bool
     {
-        return array_key_exists($event, $this->listeners);
+        return array_key_exists($event, $this->listeners) && count($this->listeners[$event]) > 0;
     }
 
     /**
