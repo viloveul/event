@@ -32,10 +32,10 @@ class Dispatcher implements IDispatcher
 
     /**
      * @param  $event
-     * @param  array    $payload
+     * @param  $payload
      * @return mixed
      */
-    public function dispatch($event, array $payload = [])
+    public function dispatch($event, $payload = null)
     {
         $result = $payload;
 

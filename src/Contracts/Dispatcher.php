@@ -13,9 +13,9 @@ interface Dispatcher
 
     /**
      * @param $event
-     * @param array    $payload
+     * @param $payload
      */
-    public function dispatch($event, array $payload = []);
+    public function dispatch($event, $payload = null);
 
     /**
      * @param $event
