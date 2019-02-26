@@ -20,8 +20,16 @@
             "Viloveul\\Event\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "ViloveulEventExample\\": "example/"
+        }
+    },
     "require": {
         "php": "~7.0",
         "ext-spl": "*"
+    },
+    "require-dev": {
+        "codeception/base": "^2.5"
     }
 }
