@@ -22,7 +22,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "ViloveulEventExample\\": "example/"
+            "ViloveulEventSample\\": "sample/"
         }
     },
     "require": {
@@ -30,6 +30,6 @@
         "ext-spl": "*"
     },
     "require-dev": {
-        "codeception/base": "^2.5"
+        "codeception/codeception": "^2.5"
     }
 }
