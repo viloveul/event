@@ -1,6 +1,6 @@
 <?php
 
-namespace ViloveulEventExample;
+namespace ViloveulEventSample;
 
 class MyListener
 {

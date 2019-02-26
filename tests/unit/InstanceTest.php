@@ -1,14 +1,22 @@
 <?php 
 
+use ViloveulEventSample;
+
 class InstanceTest extends \Codeception\Test\Unit
 {
     /**
      * @var \UnitTester
      */
     protected $tester;
+
+    protected $myEvent;
+
+    protected $myListener;
     
     protected function _before()
     {
+        $this->myEvent = new Viloveul\Event\Dispatcher();
+        $this->myListener = new ViloveulEventSample\MyListener();
     }
 
     protected function _after()
@@ -18,41 +26,33 @@ class InstanceTest extends \Codeception\Test\Unit
     // tests
     public function testAddClosureListener()
     {
-        $dispatcher = new Viloveul\Event\Dispatcher();
-        $dispatcher->addListener('foo', function() {
+        $this->myEvent->addListener('foo', function() {
             return 'bar';
         });
-        $this->tester->assertTrue($dispatcher->hasListeners('foo'));
+        $this->tester->assertTrue($this->myEvent->hasListeners('foo'));
     }
 
     public function testAddClassListener()
     {
-        $mine = new ViloveulEventExample\MyListener();
-        $dispatcher = new Viloveul\Event\Dispatcher();
-        $dispatcher->addListener('foo', [$mine, 'foo']);
-        $this->tester->assertTrue($dispatcher->hasListeners('foo'));
+        $this->myEvent->addListener('foo', [$this->myListener, 'foo']);
+        $this->tester->assertTrue($this->myEvent->hasListeners('foo'));
     }
 
     public function testDispatchEvent()
     {
-        $mine = new ViloveulEventExample\MyListener();
-        $dispatcher = new Viloveul\Event\Dispatcher();
-
-        $dispatcher->addListener('foo', [$mine, 'foo']);
-        $dispatcher->addListener('foo', [$mine, 'bar']);
-        $dispatcher->addListener('foo', function() {
+        $this->myEvent->addListener('foo', [$this->myListener, 'foo']);
+        $this->myEvent->addListener('foo', [$this->myListener, 'bar']);
+        $this->myEvent->addListener('foo', function() {
             return 'baz';
         });
-        $this->tester->assertEquals('baz', $dispatcher->dispatch('foo'));
+        $this->tester->assertEquals('baz', $this->myEvent->dispatch('foo'));
     }
 
     public function testErrorDuplicateListener()
     {
         $this->tester->expectThrowable(Viloveul\Event\ListenerException::class, function() {
-            $mine = new ViloveulEventExample\MyListener();
-            $dispatcher = new Viloveul\Event\Dispatcher();
-            $dispatcher->addListener('foo', [$mine, 'foo']);
-            $dispatcher->addListener('foo', [$mine, 'foo']);
+            $this->myEvent->addListener('foo', [$this->myListener, 'foo']);
+            $this->myEvent->addListener('foo', [$this->myListener, 'foo']);
         });
     }
 }
