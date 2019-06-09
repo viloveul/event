@@ -2,8 +2,8 @@
 
 namespace Viloveul\Event;
 
-use Viloveul\Event\Contracts\Dispatcher as IDispatcher;
 use Viloveul\Event\ListenerException;
+use Viloveul\Event\Contracts\Dispatcher as IDispatcher;
 
 class Dispatcher implements IDispatcher
 {

@@ -1,7 +1,5 @@
 <?php 
 
-use ViloveulEventSample;
-
 class InstanceTest extends \Codeception\Test\Unit
 {
     /**
