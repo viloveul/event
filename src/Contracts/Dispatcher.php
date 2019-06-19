@@ -2,35 +2,18 @@
 
 namespace Viloveul\Event\Contracts;
 
-interface Dispatcher
+use Viloveul\Event\Contracts\Provider;
+use Psr\EventDispatcher\EventDispatcherInterface;
+
+interface Dispatcher extends EventDispatcherInterface
 {
     /**
-     * @param $event
-     * @param $handler
-     * @param $priority
+     * @param Provider $provider
      */
-    public function addListener($event, callable $handler, $priority = 10): void;
+    public function addProvider(Provider $provider): void;
 
     /**
-     * @param $event
-     * @param $payload
+     * @param object $payload
      */
-    public function dispatch($event, $payload = null);
-
-    /**
-     * @param $event
-     */
-    public function getListeners($event): array;
-
-    /**
-     * @param $event
-     */
-    public function hasListeners($event): bool;
-
-    /**
-     * @param $event
-     * @param $handler
-     * @param $priority
-     */
-    public function listen($event, callable $handler, $priority = 10): void;
+    public function dispatch(object $payload);
 }
