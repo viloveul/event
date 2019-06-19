@@ -2,15 +2,33 @@
 
 namespace ViloveulEventSample;
 
+use Exception;
+use ViloveulEventSample\MyEventBar;
+use ViloveulEventSample\MyEventFoo;
+
 class MyListener
 {
-    public function bar()
+    /**
+     * @param MyEventBar $bar
+     */
+    public function bar(MyEventBar $bar)
     {
-        return 'bar';
+        if ($bar->name === 'bar') {
+            throw new Exception("bar");
+        } else {
+            throw new Exception("fail");
+        }
     }
 
-    public function foo()
+    /**
+     * @param MyEventFoo $foo
+     */
+    public function foo(MyEventFoo $foo)
     {
-        return 'foo';
+        if ($foo->name === 'foo') {
+            throw new Exception("foo");
+        } else {
+            throw new Exception("fail");
+        }
     }
 }

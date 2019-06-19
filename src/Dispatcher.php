@@ -2,112 +2,48 @@
 
 namespace Viloveul\Event;
 
-use Viloveul\Event\ListenerException;
+use InvalidArgumentException;
+use Viloveul\Event\Contracts\Provider as IProvider;
 use Viloveul\Event\Contracts\Dispatcher as IDispatcher;
 
 class Dispatcher implements IDispatcher
 {
     /**
-     * @var array
+     * @var mixed
      */
-    protected $listeners = [];
+    protected $providers = [];
 
     /**
-     * @param $event
-     * @param $handler
-     * @param $priority
+     * @param IProvider $provider
      */
-    public function addListener($event, callable $handler, $priority = 10): void
+    public function __construct(IProvider $provider)
     {
-        if (!$this->hasListeners($event)) {
-            $this->listeners[$event] = [];
-        }
-        $key = abs($priority);
-        $id = $this->buildId($handler, $key);
-        if (isset($this->listeners[$event][$key][$id])) {
-            throw new ListenerException("Listener already registered.");
-        }
-        $this->listeners[$event][$key][$id] = $handler;
+        $this->addProvider($provider);
     }
 
     /**
-     * @param  $event
-     * @param  $payload
-     * @return mixed
+     * @param $listener
      */
-    public function dispatch($event, $payload = null)
+    public function addProvider(IProvider $provider): void
     {
-        $result = $payload;
-
-        $listeners = $this->getListeners($event);
-
-        do {
-            foreach ((array) current($listeners) as $callback):
-                if (is_callable($callback)) {
-                    $filtered = call_user_func($callback, $result, $payload);
-                    if ($filtered !== null) {
-                        $result = $filtered;
-                    }
-                }
-            endforeach;
-
-        } while (false !== next($listeners));
-
-        return $result;
-    }
-
-    /**
-     * @param  $event
-     * @return mixed
-     */
-    public function getListeners($event): array
-    {
-        if (!$this->hasListeners($event)) {
-            return [];
-        }
-
-        $listeners = $this->listeners[$event];
-
-        // sort by key (its mean about priority)
-        ksort($listeners);
-
-        return $listeners;
-    }
-
-    /**
-     * @param $event
-     */
-    public function hasListeners($event): bool
-    {
-        return array_key_exists($event, $this->listeners) && count($this->listeners[$event]) > 0;
-    }
-
-    /**
-     * @param $event
-     * @param $handler
-     * @param $priority
-     */
-    public function listen($event, callable $handler, $priority = 10): void
-    {
-        $this->addListener($event, $handler, $priority);
-    }
-
-    /**
-     * @param  $handler
-     * @return mixed
-     */
-    protected function buildId($handler, $suffix)
-    {
-        if (is_string($handler)) {
-            return $handler;
-        }
-        $callback = is_object($handler) ? [$handler, $suffix] : $handler;
-        if (is_object($callback[0])) {
-            return spl_object_hash($callback[0]) . $callback[1];
-        } elseif (is_string($callback[0])) {
-            return $callback[0] . '::' . $callback[1];
+        $class = get_class($provider);
+        if (!array_key_exists($class, $this->providers)) {
+            $this->providers[$class] = $provider;
         } else {
-            return (string) mt_rand();
+            throw new InvalidArgumentException("Listener Provider already registered");
+        }
+    }
+
+    /**
+     * @param object $evt
+     */
+    public function dispatch(object $payload)
+    {
+        $context = clone $payload;
+        foreach ($this->providers as $provider) {
+            foreach ($provider->getListenersForEvent($context) as $listener) {
+                $listener($context);
+            }
         }
     }
 }

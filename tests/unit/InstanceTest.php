@@ -13,44 +13,29 @@ class InstanceTest extends \Codeception\Test\Unit
     
     protected function _before()
     {
-        $this->myEvent = new Viloveul\Event\Dispatcher();
-        $this->myListener = new ViloveulEventSample\MyListener();
+        $listener = new ViloveulEventSample\MyListener();
+        $provider = new Viloveul\Event\Provider();
+        $provider->addListener([$listener, 'foo']);
+        $provider->addListener([$listener, 'bar']);
+        $this->myEvent = new Viloveul\Event\Dispatcher($provider);
     }
 
     protected function _after()
     {
+
     }
 
-    // tests
-    public function testAddClosureListener()
+    public function testFooListener()
     {
-        $this->myEvent->addListener('foo', function() {
-            return 'bar';
+        $this->tester->expectThrowable(new Exception('foo'), function() {
+            $this->myEvent->dispatch(new ViloveulEventSample\MyEventFoo());
         });
-        $this->tester->assertTrue($this->myEvent->hasListeners('foo'));
     }
 
-    public function testAddClassListener()
+    public function testBarListener()
     {
-        $this->myEvent->addListener('foo', [$this->myListener, 'foo']);
-        $this->tester->assertTrue($this->myEvent->hasListeners('foo'));
-    }
-
-    public function testDispatchEvent()
-    {
-        $this->myEvent->addListener('foo', [$this->myListener, 'foo']);
-        $this->myEvent->addListener('foo', [$this->myListener, 'bar']);
-        $this->myEvent->addListener('foo', function() {
-            return 'baz';
-        });
-        $this->tester->assertEquals('baz', $this->myEvent->dispatch('foo'));
-    }
-
-    public function testErrorDuplicateListener()
-    {
-        $this->tester->expectThrowable(Viloveul\Event\ListenerException::class, function() {
-            $this->myEvent->addListener('foo', [$this->myListener, 'foo']);
-            $this->myEvent->addListener('foo', [$this->myListener, 'foo']);
+        $this->tester->expectThrowable(new Exception('bar'), function() {
+            $this->myEvent->dispatch(new ViloveulEventSample\MyEventBar());
         });
     }
 }
